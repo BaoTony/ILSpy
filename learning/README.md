@@ -13,9 +13,9 @@ learning/
 ├── 01-project-structure.md      ← 源码地图：解决方案全景 + 目录速查
 ├── 02-metadata-type-system.md   ← 元数据加载 + 类型系统抽象层
 ├── 03-il-layer.md               ┐
-├── 04-csharp-ast.md             │ 反编译管道（自底向上：
+├── 04-csharp-ast.md             │ 主反编译管道（自底向上：
 ├── 05-decompiler-pipeline.md    │ IL 字节码 → ILAst → C# AST → 文本输出）
-├── 06-frontend-avalonia.md      │ 前端层（Avalonia UI + MEF 组合）
+├── 06-frontend-avalonia.md      ┐ 前端交互层（GUI + CLI）
 ├── 07-cli-tools.md              ┘
 ├── 08-usage-caveats.md          ← 全程伴随：陷阱与注意事项
 └── archive/                     ← 历史材料
@@ -24,8 +24,8 @@ learning/
 ## 阅读路径
 
 **新手路径**（从零到理解全库）：按文件名编号 00 → 08 依次阅读。建议节奏：
-第 1 天读 00-01（入门 + 源码地图），第 2 天读 02-04（类型系统 → C# AST），
-第 3 天读 05-07（完整管道 → CLI），08 号陷阱文档全程伴随、改代码前先过一遍。
+第 1 天读 00-01（入门 + 源码地图），第 2 天读 02-04（类型系统 → IL → C# AST），
+第 3 天读 05-07（完整管道 → 前端 UI → CLI），08 号陷阱文档全程伴随、改代码前先过一遍。
 
 **按需查阅**：带着问题直接跳文档，见下方矩阵的"真相源"列。
 
@@ -40,9 +40,9 @@ learning/
 | 元数据加载、PEFile、TypeSystem 接口层次 | `02-metadata-type-system.md` | 其余文档仅引用 |
 | IL 字节码读取、ILAst 指令、IL Transform 管道 | `03-il-layer.md` | — |
 | C# AST 语法节点、StatementBuilder、AST Transform | `04-csharp-ast.md` | — |
-| 完整反编译管道：CSharpDecompiler、DecompileRun | `05-decompiler-pipeline.md` | — |
-| Avalonia UI、MEF 组合、面板系统 | `06-frontend-avalonia.md` | — |
-| ilspycmd CLI、PowerShell、项目导出 | `07-cli-tools.md` | — |
+| 完整反编译管道：CSharpDecompiler 调度、DecompileRun、错误恢复、WholeProjectDecompiler 导出引擎 | `05-decompiler-pipeline.md` | — |
+| Avalonia UI、MEF 组合、面板系统、分析器 | `06-frontend-avalonia.md` | — |
+| ilspycmd CLI、PowerShell、Docker 容器 | `07-cli-tools.md` | — |
 | 陷阱（常见错误、配置问题、平台差异） | `08-usage-caveats.md` | 00 号文档仅留速览表 |
 
 ## 维护规则

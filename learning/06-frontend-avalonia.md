@@ -1,6 +1,6 @@
 # ILSpy 前端架构 — Avalonia UI
 
-> 职责：Avalonia 12 前端层 — MEF 组合根 · 面板系统 · 语言服务 · 命令体系 · Dock 布局
+> 职责：Avalonia 12 前端层 — MEF 组合根 · 面板系统 · 语言服务 · 命令体系 · 分析器/搜索 · Dock 布局
 
 ---
 

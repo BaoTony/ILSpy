@@ -1,6 +1,6 @@
 # ILSpy CLI 工具与 PowerShell
 
-> 职责：命令行工具 — ilspycmd · PowerShell Cmdlet · 项目导出 · BAML 处理 · Docker 容器
+> 职责：命令行工具 — ilspycmd · PowerShell Cmdlet · Docker 容器 · BAML 处理
 
 ---
 
