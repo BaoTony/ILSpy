@@ -1,7 +1,7 @@
 # ILSpy 项目结构导航
 
 > 职责：源码地图 — 解决方案全景 + 核心库目录速查
-深度分析见各分层文档（02-07）· 2026-10-19
+深度分析见各分层文档（02-10）· 2026-10-19
 
 ---
 
@@ -48,9 +48,9 @@ Solution 'ILSpy.sln' (完整版)
 |---|---|---|
 | TypeSystem/ | 类型系统抽象（IType/IMethod/IField...） | [02](02-metadata-type-system.md) |
 | Metadata/ | PE/Metadata 加载、解析、AssemblyResolver | [02](02-metadata-type-system.md) |
-| IL/ | IL 抽象语法树 + IL Transform 管道（60+ 步） | [03](03-il-layer.md) |
-| CSharp/ | C# 语言层：AST、Builder、OutputVisitor、Resolver | [04](04-csharp-ast.md) |
-| Semantics/ | 语义解析结果（ResolveResult 体系） | [04](04-csharp-ast.md) |
+| IL/ | IL 抽象语法树 + IL Transform 管道（60+ 步） | [03](03-il-reader-ast.md) [04](04-il-transforms.md) |
+| CSharp/ | C# 语言层：AST、Builder、OutputVisitor、Resolver | [05](05-csharp-syntax-tree.md) [06](06-csharp-output.md) |
+| Semantics/ | 语义解析结果（ResolveResult 体系） | [06](06-csharp-output.md) |
 | Disassembler/ | IL 反汇编器（ReflectionDisassembler） | — |
 | DebugInfo/ | PDB 调试信息生成与消费 | — |
 | DebugSteps/ | 逐步调试支持（Stepper） | — |

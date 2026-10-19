@@ -4,7 +4,7 @@
 
 ## 目录约定
 
-全部文档按**实际阅读顺序**编号（00-08），文件名即阅读顺序：
+全部文档按**实际阅读顺序**编号（00-11），文件名即阅读顺序：
 
 ```
 learning/
@@ -12,38 +12,43 @@ learning/
 ├── 00-getting-started.md        ← 从这开始：架构速览 + 5 分钟上手 + 搭建环境
 ├── 01-project-structure.md      ← 源码地图：解决方案全景 + 目录速查
 ├── 02-metadata-type-system.md   ← 元数据加载 + 类型系统抽象层
-├── 03-il-layer.md               ┐
-├── 04-csharp-ast.md             │ 主反编译管道（自底向上：
-├── 05-decompiler-pipeline.md    │ IL 字节码 → ILAst → C# AST → 文本输出）
-├── 06-frontend-avalonia.md      ┐ 前端交互层（GUI + CLI）
-├── 07-cli-tools.md              ┘
-├── 08-usage-caveats.md          ← 全程伴随：陷阱与注意事项
+├── 03-il-reader-ast.md          ┐
+├── 04-il-transforms.md          │ IL 中间表示层：
+├── 05-csharp-syntax-tree.md     │ IL 字节码 → ILAst → IL Transform → C# AST
+├── 06-csharp-output.md          │ → OutputVisitor 文本输出
+├── 07-flow-analysis.md          │ 数据流分析（支配树/定值/到达定义）
+├── 08-decompiler-pipeline.md    ┘ 反编译全流程调度
+├── 09-frontend-avalonia.md      ┐ 前端交互层（GUI + CLI）
+├── 10-cli-tools.md              ┘
+├── 11-usage-caveats.md          ← 全程伴随：陷阱与注意事项
+├── scripts/                     ← 自动化脚本（Python + PowerShell）
 └── archive/                     ← 历史材料
 ```
 
 ## 阅读路径
 
-**新手路径**（从零到理解全库）：按文件名编号 00 → 08 依次阅读。建议节奏：
-第 1 天读 00-01（入门 + 源码地图），第 2 天读 02-04（类型系统 → IL → C# AST），
-第 3 天读 05-07（完整管道 → 前端 UI → CLI），08 号陷阱文档全程伴随、改代码前先过一遍。
+**新手路径**（从零到理解全库）：按文件名编号 00 → 11 依次阅读。建议节奏：
+第 1 天读 00-01（入门 + 源码地图），第 2 天读 02-04（类型系统 → IL 层），
+第 3 天读 05-07（C# AST → 输出 → 数据流分析），第 4 天读 08-10（完整管道 → 前端 → CLI），11 号陷阱文档全程伴随。
 
 **按需查阅**：带着问题直接跳文档，见下方矩阵的"真相源"列。
 
 ## 文档职责与单一真相源矩阵
-
-同一主题的内容只以一份文档为准（真相源），其他文档只链接、不复制：
 
 | 主题 | 真相源 | 其他文档 |
 |---|---|---|
 | 新手入门 / 架构速成 / 搭建环境 | `00-getting-started.md` | — |
 | 目录树、解决方案、导航速查 | `01-project-structure.md` | — |
 | 元数据加载、PEFile、TypeSystem 接口层次 | `02-metadata-type-system.md` | 其余文档仅引用 |
-| IL 字节码读取、ILAst 指令、IL Transform 管道 | `03-il-layer.md` | — |
-| C# AST 语法节点、StatementBuilder、AST Transform | `04-csharp-ast.md` | — |
-| 完整反编译管道：CSharpDecompiler 调度、DecompileRun、错误恢复、WholeProjectDecompiler 导出引擎 | `05-decompiler-pipeline.md` | — |
-| Avalonia UI、MEF 组合、面板系统、分析器 | `06-frontend-avalonia.md` | — |
-| ilspycmd CLI、PowerShell、Docker 容器 | `07-cli-tools.md` | — |
-| 陷阱（常见错误、配置问题、平台差异） | `08-usage-caveats.md` | 00 号文档仅留速览表 |
+| IL 字节码读取、ILAst 指令体系、控制流 | `03-il-reader-ast.md` | — |
+| IL Transform 管道（60+ 步）、内联/循环/async | `04-il-transforms.md` | — |
+| C# AST 节点体系（Expression/Statement/TypeMember） | `05-csharp-syntax-tree.md` | — |
+| StatementBuilder、ExpressionBuilder、AST Transform、OutputVisitor | `06-csharp-output.md` | — |
+| 数据流分析框架（支配树、定值分析、到达定义） | `07-flow-analysis.md` | — |
+| 反编译全流程：CSharpDecompiler 调度、DecompileRun、错误恢复、Debug Steps、WholeProjectDecompiler | `08-decompiler-pipeline.md` | — |
+| Avalonia UI、MEF 组合、面板系统、分析器 | `09-frontend-avalonia.md` | — |
+| ilspycmd CLI、PowerShell、Docker 容器 | `10-cli-tools.md` | — |
+| 陷阱（常见错误、配置问题、平台差异） | `11-usage-caveats.md` | 00 号文档仅留速览表 |
 
 ## 维护规则
 

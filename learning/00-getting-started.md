@@ -93,10 +93,10 @@ ILSpy 支持：
 | 子系统 | 核心类 / 入口 | 详析 |
 |---|---|---|
 | ① 文件加载 | `FileLoaderRegistry` → `PEFileLoader` / `BundleFileLoader` / ... | [02](02-metadata-type-system.md) |
-| ② 分析 | `IAnalyzer`（18 个分析器）+ `SearchStrategy`（6 种搜索） | [06](06-frontend-avalonia.md) |
-| ③ 导出 | `WholeProjectDecompiler.DecompileProject()` | [05](05-decompiler-pipeline.md) |
-| ④ 前端 | `AppComposition`（MEF）→ `AssemblyListPane` + `DecompilerTextView` | [06](06-frontend-avalonia.md) |
-| 主管道 | `CSharpDecompiler.DecompileWholeTypeAsString()` — 6 阶段 | [02](02-metadata-type-system.md) → [03](03-il-layer.md) → [04](04-csharp-ast.md) → [05](05-decompiler-pipeline.md) |
+| ② 分析 | `IAnalyzer`（18 个分析器）+ `SearchStrategy`（6 种搜索） | [09](09-frontend-avalonia.md) |
+| ③ 导出 | `WholeProjectDecompiler.DecompileProject()` | [08](08-decompiler-pipeline.md) |
+| ④ 前端 | `AppComposition`（MEF）→ `AssemblyListPane` + `DecompilerTextView` | [09](09-frontend-avalonia.md) |
+| 主管道 | `CSharpDecompiler.DecompileWholeTypeAsString()` — 6 阶段 | [02](02-metadata-type-system.md) → [03](03-il-reader-ast.md) → [04](04-il-transforms.md) → [05](05-csharp-syntax-tree.md) → [06](06-csharp-output.md) → [08](08-decompiler-pipeline.md) |
 
 ---
 
@@ -148,7 +148,7 @@ class IfInstruction(ILInstruction condition, Block trueBlock, ...) : ILInstructi
 class BlockContainer(Block entryPoint) : ILInstruction  // 函数体
 ```
 
-> 详见 [03-il-layer.md](03-il-layer.md)
+> 详见 [03-il-reader-ast.md](03-il-reader-ast.md)
 
 ### 3.4 C# AST — 反编译结果的语法树
 
@@ -166,7 +166,7 @@ SyntaxTree
               └── FieldDeclaration
 ```
 
-> 详见 [04-csharp-ast.md](04-csharp-ast.md)
+> 详见 [05-csharp-syntax-tree.md](05-csharp-syntax-tree.md)
 
 ---
 
@@ -239,7 +239,7 @@ dotnet run --project ILSpy/ILSpy.csproj
 4. **测试需要子模块** — `ILSpy-tests/` 是 git submodule，默认不检出；`git submodule update --init` 后才能运行全部测试。
 5. **恢复依赖用 `restore.ps1`，不要直接用 `dotnet restore`** — 否则会裁剪 `packages.lock.json`。
 
-> 全部陷阱：见 [08-usage-caveats.md](08-usage-caveats.md)。
+> 全部陷阱：见 [11-usage-caveats.md](11-usage-caveats.md)。
 
 ---
 
