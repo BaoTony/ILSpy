@@ -62,23 +62,49 @@ ILSpy 支持：
 - **`CSharpDecompiler`** — 编程 API 反编译（库消费者）
 - **`ilspycmd` / ILSpy GUI** — 命令行 / 图形界面（终端用户）
 
-**五条核心链路**：
+**ILSpy 的实际子系统与链路**（按项目真实架构，4 个子系统、1 条主反编译管道）：
 
-| 链路 | 路径 | 详析 |
+```
+┌──────────────────────────────────────────────────────────────┐
+│ ILSpy 的功能子系统                                            │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ① 文件加载 (File Loading)    多格式识别：PE / Bundle / ZIP │
+│  ② 分析 (Analysis)            引用分析 / 搜索 / 类图         │
+│  ③ 导出 (Export)              整项目 → .csproj + .cs 文件   │
+│  ④ 前端交互 (Frontend)        GUI / CLI / PowerShell        │
+│                                                              │
+│  ———— 以上 4 个子系统都依赖下面的主反编译管道 —————            │
+│                                                              │
+│  主反编译管道 (Main Decompilation Pipeline)                   │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │ DLL/EXE 文件                                         │    │
+│  │   → PEFile → MetadataFile → DecompilerTypeSystem     │    │
+│  │   → ILReader (IL 字节码 → ILAst)                     │    │
+│  │   → IL Transforms (60+ 步：内联/循环/async/yield...) │    │
+│  │   → StatementBuilder (ILAst → C# AST)                │    │
+│  │   → AST Transforms (14 步：变量声明/命名/LINQ...)    │    │
+│  │   → CSharpOutputVisitor → string (C# 源码文本)        │    │
+│  └──────────────────────────────────────────────────────┘    │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+| 子系统 | 核心类 / 入口 | 详析 |
 |---|---|---|
-| 元数据 | 文件 → PEFile → MetadataFile → DecompilerTypeSystem | [02](02-metadata-type-system.md) |
-| IL → ILAst | ILReader.ReadIL() → ILFunction → IL Transforms | [03](03-il-layer.md) |
-| ILAst → C# | StatementBuilder → C# SyntaxTree → AST Transforms | [04](04-csharp-ast.md) |
-| C# → 文本 | CSharpOutputVisitor → TextWriterTokenWriter | [04](04-csharp-ast.md) |
-| 完整管道 | CSharpDecompiler.DecompileWholeTypeAsString() | [05](05-decompiler-pipeline.md) |
+| ① 文件加载 | `FileLoaderRegistry` → `PEFileLoader` / `BundleFileLoader` / ... | [02](02-metadata-type-system.md) |
+| ② 分析 | `IAnalyzer`（18 个分析器）+ `SearchStrategy`（6 种搜索） | [06](06-frontend-avalonia.md) |
+| ③ 导出 | `WholeProjectDecompiler.DecompileProject()` | [05](05-decompiler-pipeline.md) |
+| ④ 前端 | `AppComposition`（MEF）→ `AssemblyListPane` + `DecompilerTextView` | [06](06-frontend-avalonia.md) |
+| 主管道 | `CSharpDecompiler.DecompileWholeTypeAsString()` — 6 阶段 | [02](02-metadata-type-system.md) → [03](03-il-layer.md) → [04](04-csharp-ast.md) → [05](05-decompiler-pipeline.md) |
 
 ---
 
 ## 三、核心概念
 
-### 3.1 反编译管道的三个阶段
+### 3.1 反编译管道的 6 个阶段
 
-ILSpy 的反编译不是一步到位的，而是经过三层表示：
+ILSpy 的反编译不是一步到位的，而是经过三层中间表示、六个处理阶段：
 
 ```
 原始 IL 字节码 (Raw Bytes)
