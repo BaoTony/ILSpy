@@ -229,6 +229,9 @@ Examples:
 		[Option("--bundle-entry <name>", "The assembly inside a single-file bundle (or other package) to work on, as printed when such a file is passed without this option. Ignored for input files that are not packages.", CommandOptionType.SingleValue)]
 		public string BundleEntryName { get; }
 
+		[Option("--extract-api", "Extract the public API surface of the assembly and write it as a readable text listing. Uses System.Reflection.Metadata for 100% accurate results without loading dependencies.", CommandOptionType.NoValue)]
+		public bool ExtractApiFlag { get; }
+
 		[Option("--nested-directories", "Use nested directories for namespaces.", CommandOptionType.NoValue)]
 		public bool NestedDirectories { get; }
 
@@ -343,17 +346,36 @@ Examples:
 					}
 
 					return 0;
-				}
-				else
+			}
+			else if (ExtractApiFlag)
+			{
+				foreach (var file in InputAssemblyNames)
 				{
-					foreach (var file in InputAssemblyNames)
+					using var peFile = InputFileLoader.Load(file, BundleEntryName);
+
+					if (outputDirectory != null)
 					{
-						int result = PerformPerFileAction(file);
-						if (result != 0)
-							return result;
+						string outputName = Path.GetFileNameWithoutExtension(file);
+						using var apiOutput = File.CreateText(Path.Combine(outputDirectory, outputName) + ".api.txt");
+						ApiExtractor.Extract(peFile, apiOutput);
 					}
-					return ExitCodeForDecompilationErrors();
+					else
+					{
+						ApiExtractor.Extract(peFile, output);
+					}
 				}
+				return 0;
+			}
+			else
+			{
+				foreach (var file in InputAssemblyNames)
+				{
+					int result = PerformPerFileAction(file);
+					if (result != 0)
+						return result;
+				}
+				return ExitCodeForDecompilationErrors();
+			}
 			}
 			catch (PackageEntryRequiredException ex)
 			{
