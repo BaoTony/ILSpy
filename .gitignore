@@ -23,6 +23,9 @@ ILSpy.Installer/wix/
 DecompilerTests.config.json
 *.trx
 report/
+# Python bytecode cache
+__pycache__/
+
 # Claude Code local session/skills directory
 /.claude/
 /.understand-anything
